@@ -1,30 +1,24 @@
-import React from "react";
+import styles from "./Map.module.css";
 import GoogleMapReact from "google-map-react";
+import { IconMarker } from "./icons/IconMarker";
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
-
-export default function Map() {
+export default function Map(props) {
   const defaultProps = {
     center: {
-      lat: 10.99835602,
-      lng: 77.01502627,
+      lat: props.lat,
+      lng: props.lng,
     },
     zoom: 11,
   };
 
   return (
-    // Important! Always set the container height explicitly
-    <div style={{ height: "100vh", width: "100%" }}>
+    <div className={styles.container} style={{ gridArea: props.area }}>
       <GoogleMapReact
         bootstrapURLKeys={{ key: "AIzaSyCHJjrVbhvsnOAiQH7RJRZgZITJWWYmAuU" }}
         defaultCenter={defaultProps.center}
         defaultZoom={defaultProps.zoom}
       >
-        <AnyReactComponent
-          lat={10.99835602}
-          lng={77.01502627}
-          text="My Marker"
-        />
+        <IconMarker lat={props.lat} lng={props.lng} />
       </GoogleMapReact>
     </div>
   );

@@ -1,0 +1,19 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10px;
+}
+
+body {
+  font-size: 1.8rem;
+  margin: 0;
+  padding: 0;
+}
+
+.marker {
+  font-size: 40px;
+  color: #ff0080;
+  transform: translate(-50%, -100%);
+}

@@ -1,0 +1,29 @@
+.container {
+  min-height: 100vh;
+  width: 100vw;
+  display: grid;
+  grid-template-areas:
+    "user-info"
+    "user-map"
+    "search"
+    "last-info"
+    "last-map"
+    "history";
+}
+
+@media (min-width: 1000px) {
+  .container {
+    padding: 2em;
+    grid-template-columns: 0.75fr 1fr 0.75fr;
+    grid-template-rows: 5fr 40px 5fr;
+    gap: 15px;
+    grid-template-areas:
+      "history user-map user-info"
+      "history search search"
+      "history last-map last-info";
+  }
+
+  .container > * {
+    border: 1px solid black;
+  }
+}

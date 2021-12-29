@@ -1,0 +1,14 @@
+.container {
+  min-height: 100vw;
+  width: 100vw;
+  max-height: 500px;
+  max-width: 1000px;
+}
+
+@media (min-width: 1000px) {
+  .container {
+    width: unset;
+    min-height: 200px;
+    min-width: 200px;
+  }
+}
