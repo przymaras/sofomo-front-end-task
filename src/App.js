@@ -1,66 +1,53 @@
 import { useEffect, useState } from "react";
+import { useDataFetcher } from "./hooks/useDataFetcher";
+
 import styles from "./App.module.css";
+
 import InfoBox from "./components/InfoBox";
 import Map from "./components/Map";
 import SearchBar from "./components/SearchBar";
+import LocationItem from "./components/LocationItem";
+
 import { nanoid } from "nanoid";
-import HistoryItem from "./components/HistoryItem";
 
 function App() {
-  const [userDataAvailable, setUserDataAvailable] = useState(false);
-  const [userData, setUserData] = useState({});
-  const [searchDataAvailable, setSearchDataAvailable] = useState(false);
-  const [searchData, setSearchData] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
   const [searchHistory, setSearchHistory] = useState(
     sessionStorage.getItem("searchHistory")
       ? JSON.parse(sessionStorage.getItem("searchHistory"))
       : []
   );
 
+  const ipstackKey = "c5bf1cc2f1b52c6c3c63a427ae3cb063";
+
+  const [userIp, userIpAvailable] = useDataFetcher(
+    "https://api.ipify.org/?format=json"
+  );
+  const [userData, userDataAvailable] = useDataFetcher(
+    userIpAvailable
+      ? `http://api.ipstack.com/${userIp.ip}?access_key=${ipstackKey}`
+      : ""
+  );
+  const [searchData, searchDataAvailable] = useDataFetcher(
+    searchQuery
+      ? `http://api.ipstack.com/${searchQuery}?access_key=${ipstackKey}`
+      : ""
+  );
+
   useEffect(() => {
-    async function getUserIpData() {
-      try {
-        let res = await fetch("https://api.ipify.org/?format=json");
-        let data = await res.json();
-        res = await fetch(
-          `http://api.ipstack.com/${data.ip}?access_key=c5bf1cc2f1b52c6c3c63a427ae3cb063`
-        );
-        data = await res.json();
-        setUserData(data);
-        setUserDataAvailable(true);
-      } catch (e) {
-        console.error("Can't fetch data ...");
-      }
+    if (searchData.ip) {
+      setSearchHistory((prevState) => [
+        ...prevState,
+        {
+          searchValue: searchQuery,
+          ip: searchData.ip,
+          city: searchData.city,
+          latitude: searchData.latitude,
+          longitude: searchData.longitude,
+        },
+      ]);
     }
-
-    getUserIpData();
-  }, []);
-
-  function handleSearch(query) {
-    async function getSearchData() {
-      try {
-        let res = await fetch(
-          `http://api.ipstack.com/${query}?access_key=c5bf1cc2f1b52c6c3c63a427ae3cb063`
-        );
-        let data = await res.json();
-        setSearchData(data);
-        setSearchDataAvailable(true);
-        setSearchHistory((prevState) => [
-          ...prevState,
-          {
-            searchValue: query,
-            ip: data.ip,
-            city: data.city,
-            lat: data.latitude,
-            lng: data.longitude,
-          },
-        ]);
-      } catch (e) {
-        console.error("Can't fetch data ...");
-      }
-    }
-    getSearchData();
-  }
+  }, [searchData]);
 
   useEffect(() => {
     sessionStorage.setItem("searchHistory", JSON.stringify(searchHistory));
@@ -70,12 +57,7 @@ function App() {
     <div className={styles.container}>
       <InfoBox title="Your location" area="user-info">
         {userDataAvailable ? (
-          <>
-            <p>IP: {userData.ip}</p>
-            <p>{userData.city}</p>
-            <p>{userData.latitude}</p>
-            <p>{userData.longitude}</p>
-          </>
+          <LocationItem item={userData} />
         ) : (
           <p>Loading ...</p>
         )}
@@ -85,16 +67,10 @@ function App() {
         lng={userDataAvailable && userData.longitude}
         area="user-map"
       />
-      <SearchBar area="search" handleSearch={handleSearch} />
+      <SearchBar area="search" handleSearch={setSearchQuery} />
       <InfoBox title="Search result" area="last-info">
         {searchDataAvailable ? (
-          <>
-            <p>https://google.com</p>
-            <p>IP: {searchData.ip}</p>
-            <p>{searchData.city}</p>
-            <p>{searchData.latitude}</p>
-            <p>{searchData.longitude}</p>
-          </>
+          <LocationItem item={{ ...searchData, searchValue: searchQuery }} />
         ) : (
           <p>You have to search something first...</p>
         )}
@@ -107,7 +83,7 @@ function App() {
       <InfoBox title="Search history" area="history" justifyTop={true}>
         {searchHistory.length > 0 &&
           searchHistory.map((item) => {
-            return <HistoryItem item={item} key={nanoid()} />;
+            return <LocationItem item={item} key={nanoid()} />;
           })}
       </InfoBox>
     </div>

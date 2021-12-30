@@ -1,4 +1,4 @@
-import { useState } from "react/cjs/react.development";
+import { useState } from "react";
 import styles from "./SearchBar.module.css";
 
 function SearchBar(props) {
@@ -7,7 +7,7 @@ function SearchBar(props) {
   function handleSubmit(e) {
     e.preventDefault();
     const urlExpression =
-      /(http(s)?:\/\/.)?(www\.)?(?:[-a-zA-Z0-9@:%_\+~#=]{1,63}\.)+[a-z]{2,6}\b((?:[-a-zA-Z0-9@:%_\+~#?&//="]+\.)*[-a-zA-Z0-9@:%_\+~#?&//="]+)?/g;
+      /(http(s)?:\/\/.)?(www\.)?(?:[-a-zA-Z0-9@:%_+~#=]{1,63}\.)+[a-z]{2,6}\b((?:[-a-zA-Z0-9@:%_+~#?&//="]+\.)*[-a-zA-Z0-9@:%_+~#?&//="]+)?/g;
     const urlRegex = new RegExp(urlExpression);
 
     const ipExpression =
