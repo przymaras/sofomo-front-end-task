@@ -5,18 +5,22 @@ function useDataFetcher(url) {
   const [isAvailable, setIsAvailable] = useState(false);
 
   useEffect(() => {
-    if (url) {
-      setIsAvailable(false);
-      fetch(url)
-        .then((res) => {
-          if (res.ok) return res.json();
-          else throw Error("Error while fetching data...");
-        })
-        .then((data) => {
+    async function getData(fetchUrl) {
+      try {
+        const res = await fetch(fetchUrl);
+        if (res.ok) {
+          const data = await res.json();
           setData(data);
           setIsAvailable(true);
-        })
-        .catch((err) => console.error(err.message));
+        } else throw Error("Error while fetching data...");
+      } catch (err) {
+        console.error(err.message);
+      }
+    }
+
+    if (url) {
+      setIsAvailable(false);
+      getData(url);
     }
   }, [url]);
 

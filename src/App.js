@@ -34,6 +34,16 @@ function App() {
       : ""
   );
 
+  // const [userIp, userIpAvailable] = useDataFetcher(
+  //   "https://api.ipify.org/?format=json"
+  // );
+  // const [userData, userDataAvailable] = useDataFetcher(
+  //   userIpAvailable ? `/dummyData.json` : ""
+  // );
+  // const [searchData, searchDataAvailable] = useDataFetcher(
+  //   searchQuery ? `/dummyData.json` : ""
+  // );
+
   useEffect(() => {
     if (searchData.ip) {
       setSearchHistory((prevState) => [
@@ -71,6 +81,8 @@ function App() {
       <InfoBox title="Search result" area="last-info">
         {searchDataAvailable ? (
           <LocationItem item={{ ...searchData, searchValue: searchQuery }} />
+        ) : searchQuery ? (
+          <p>Loading...</p>
         ) : (
           <p>You have to search something first...</p>
         )}

@@ -1,4 +1,4 @@
-function HistoryItem(props) {
+function LocationItem(props) {
   return (
     <div>
       {props.item.searchValue && <p>Query: {props.item.searchValue}</p>}
@@ -10,4 +10,4 @@ function HistoryItem(props) {
   );
 }
 
-export default HistoryItem;
+export default LocationItem;
