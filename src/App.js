@@ -18,31 +18,31 @@ function App() {
       : []
   );
 
-  const ipstackKey = "c5bf1cc2f1b52c6c3c63a427ae3cb063";
-
-  const [userIp, userIpAvailable] = useDataFetcher(
-    "https://api.ipify.org/?format=json"
-  );
-  const [userData, userDataAvailable] = useDataFetcher(
-    userIpAvailable
-      ? `http://api.ipstack.com/${userIp.ip}?access_key=${ipstackKey}`
-      : ""
-  );
-  const [searchData, searchDataAvailable] = useDataFetcher(
-    searchQuery
-      ? `http://api.ipstack.com/${searchQuery}?access_key=${ipstackKey}`
-      : ""
-  );
+  // const ipstackKey = "c5bf1cc2f1b52c6c3c63a427ae3cb063";
 
   // const [userIp, userIpAvailable] = useDataFetcher(
   //   "https://api.ipify.org/?format=json"
   // );
   // const [userData, userDataAvailable] = useDataFetcher(
-  //   userIpAvailable ? `/dummyData.json` : ""
+  //   userIpAvailable
+  //     ? `http://api.ipstack.com/${userIp.ip}?access_key=${ipstackKey}`
+  //     : ""
   // );
   // const [searchData, searchDataAvailable] = useDataFetcher(
-  //   searchQuery ? `/dummyData.json` : ""
+  //   searchQuery
+  //     ? `http://api.ipstack.com/${searchQuery}?access_key=${ipstackKey}`
+  //     : ""
   // );
+
+  const [userIp, userIpAvailable] = useDataFetcher(
+    "https://api.ipify.org/?format=json"
+  );
+  const [userData, userDataAvailable] = useDataFetcher(
+    userIpAvailable ? `http://localhost:3000/dummyData.json` : ""
+  );
+  const [searchData, searchDataAvailable] = useDataFetcher(
+    searchQuery ? `http://localhost:3000/dummyData.json` : ""
+  );
 
   useEffect(() => {
     if (searchData.ip) {
@@ -57,7 +57,7 @@ function App() {
         },
       ]);
     }
-  }, [searchData]);
+  }, [searchData, searchQuery]);
 
   useEffect(() => {
     sessionStorage.setItem("searchHistory", JSON.stringify(searchHistory));
