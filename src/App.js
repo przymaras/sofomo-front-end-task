@@ -38,10 +38,10 @@ function App() {
     "https://api.ipify.org/?format=json"
   );
   const [userData, userDataAvailable] = useDataFetcher(
-    userIpAvailable ? `http://localhost:3000/dummyData.json` : ""
+    userIpAvailable ? `/dummyData.json` : ""
   );
   const [searchData, searchDataAvailable] = useDataFetcher(
-    searchQuery ? `http://localhost:3000/dummyData.json` : ""
+    searchQuery ? `/dummyData.json` : ""
   );
 
   useEffect(() => {
